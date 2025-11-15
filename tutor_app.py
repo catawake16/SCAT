@@ -431,13 +431,12 @@ def reset_cycle():
     st.session_state.chat_history = []
     st.session_state.last_uptake = None
     st.session_state.last_decision = None
-
-st.set_page_config(
-    page_title="SCAT - Syntax Complexity AI Tutor",
-    page_icon="./static/SCAT-3D.png",
-    layout="centered"
-)
-
+def main():   # ← 注意！这才是 main()
+    st.set_page_config(
+        page_title="SCAT - Syntax Complexity AI Tutor",
+        page_icon="./static/SCAT-3D.png",
+        layout="centered"
+    )
     init_session_state()
 
     # ========================
@@ -453,7 +452,7 @@ st.set_page_config(
         unsafe_allow_html=True
     )
     # ========================
-    # ========================
+
 # 显示对话历史!!!
 # ========================
 if st.session_state.get("chat_history"):
