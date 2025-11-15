@@ -434,7 +434,7 @@ def reset_cycle():
 def main():   # ← 注意！这才是 main()
     st.set_page_config(
         page_title="SCAT - Syntax Complexity AI Tutor",
-        page_icon="./static/SCAT-3D.png",
+        page_icon="static/SCAT-3D.png",
         layout="centered"
     )
     init_session_state()
@@ -445,7 +445,7 @@ def main():   # ← 注意！这才是 main()
     st.markdown(
         """
         <div style='text-align:center;'>
-            <img src="./static/SCAT-3D.png" width="80">
+            <img src="static/SCAT-3D.png" width="80">
             <h1>Syntax Complexity AI Tutor (SCAT)</h1>
         </div>
         """,
@@ -465,7 +465,7 @@ if st.session_state.get("chat_history"):
             st.markdown(
                 f"""
                 <div style='display:flex; align-items:flex-start; margin-bottom: 10px;'>
-                    <img src='./static/SCAT-3D.png' width='32' style='margin-right:10px; margin-top:4px;'>
+                    <img src='static/SCAT-3D.png' width='32' style='margin-right:10px; margin-top:4px;'>
                     <div style='line-height:1.4;'>
                         <strong>SCAT:</strong> {text}
                     </div>
