@@ -520,14 +520,40 @@ def main():
                 st.warning("Please enter a sentence before starting a cycle.")
 
     # ===== 显示对话历史 =====
-    if st.session_state.chat_history:
-        st.markdown("### 💬 Conversation with SCAT")
-        for speaker, text in st.session_state.chat_history:
-            if speaker.startswith("SCAT"):
-                st.markdown(f"**🧠 {speaker}:** {text}")
-            else:
-                st.markdown(f"**🙂 {speaker}:** {text}")
-        st.markdown("---")
+# ===== 显示对话历史 =====
+if st.session_state.chat_history:
+    st.markdown("### 💬 Conversation with SCAT")
+    for speaker, text in st.session_state.chat_history:
+
+        # ---- SCAT 头像 + 文本 ----
+        if speaker.startswith("SCAT"):
+            st.markdown(
+                f"""
+                <div style='display:flex; align-items:flex-start; margin-bottom: 10px;'>
+                    <img src='static/SCAT-3D.png' width='32' style='margin-right:10px; margin-top:4px;'>
+                    <div style='line-height:1.4;'>
+                        <strong>SCAT:</strong> {text}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        # ---- 学生回合 ----
+        else:
+            st.markdown(
+                f"""
+                <div style='display:flex; align-items:flex-start; margin-bottom: 10px;'>
+                    <div style='font-size:28px; margin-right:8px;'>🙂</div>
+                    <div style='line-height:1.4;'>
+                        <strong>{speaker}:</strong> {text}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+    st.markdown("---")
 
     # ===== Step 2: 学生回应，系统自动分析 uptake 并升级 =====
     if st.session_state.original_sentence:
