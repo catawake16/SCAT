@@ -432,32 +432,61 @@ def reset_cycle():
     st.session_state.last_uptake = None
     st.session_state.last_decision = None
 
-
 def main():
-
     st.set_page_config(
         page_title="SCAT - Syntax Complexity AI Tutor",
-        page_icon="SCAT-3D.png",  # 图标路径
-        layout="centered"  # 保留你原来的布局设置
+        page_icon="SCAT-3D.png",
+        layout="centered"
     )
 
     init_session_state()
 
-       # 标题
-    st.markdown(
-    f"""
+    # ========================
+    # 标题区：必须要先渲染
+    # ========================
+   st.markdown(
+    """
     <div style='text-align:center;'>
-        <img src='SCAT-3D.png' width='120'>
+        <img src="static/SCAT-3D.png" width="80">
+        <h1>Syntax Complexity AI Tutor (SCAT)</h1>
     </div>
-    <h1 style='text-align:center; font-size:40px; margin-top: 10px;'>
-        Syntax Complexity AI Tutor (SCAT)
-    </h1>
-    <h3 style='text-align:center; color:#AAAAAA;'>
-        Dynamic Assessment × Controlled Complexification
-    </h3>
     """,
     unsafe_allow_html=True
 )
+
+    st.markdown("### ✏️ What can SCAT help you with?")
+
+    # ========================
+    # 这里才是显示对话历史!!!
+    # ========================
+    if st.session_state.get("chat_history"):
+        st.markdown("### 💬 Conversation with SCAT")
+
+        for speaker, text in st.session_state.chat_history:
+
+            if speaker.startswith("SCAT"):
+                st.markdown(
+                    f"""
+                    <div style='display:flex; align-items:flex-start; margin-bottom: 10px;'>
+                        <img src='static/SCAT-3D.png' width='32' style='margin-right:10px;'>
+                        <div><strong>SCAT:</strong> {text}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    f"""
+                    <div style='display:flex; align-items:flex-start; margin-bottom: 10px;'>
+                        <div style="font-size:28px; margin-right:10px;">🙂</div>
+                        <div><strong>{speaker}:</strong> {text}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        st.markdown("---")
+
 
 
     # 简要说明（用户视角）
