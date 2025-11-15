@@ -333,34 +333,27 @@ def analyze_uptake(original, optimized, operation, current_level,
 # ========== 9.5 生成 implicit / semi-implicit 提示 ==========
 def generate_other_level_turn(original, optimized, operation, level,
                               last_tutor_turn, learner_turn):
-    """
-    为 implicit 和 semi-implicit 级别生成比较轻的提示。
-    这里先做一个简单版本，够用就行。
-    """
+
     mediation_goal = MEDIATION_MAP.get(operation, MEDIATION_MAP["general"]).get(level, "")
 
     if level == "implicit":
-        # 非常轻的提醒，不讲术语
         return (
             f"Thanks for your sentence! Try reading it aloud and ask yourself: "
-            f"could any parts be linked a bit more smoothly or packed together more tightly? "
-            f"Focus especially on how the ideas connect. {mediation_goal}"
+            f"could any parts feel like they could flow a bit more smoothly or be joined more naturally? "
+            f"Focus especially on how the ideas connect."
         )
 
     elif level == "semi-implicit":
-        # 给一点结构性暗示，但不讲太多规则
         return (
             f"You're moving in a good direction. Now, consider whether you could combine some "
             f"parts of your sentence—for example, by adding a small phrase or connector that shows "
-            f"time, cause, or extra detail. Think about how the optimized version might do this.\n\n"
-            f"{mediation_goal}"
+            f"time, cause, or extra detail. Think about how the optimized version might do this."
         )
 
     else:
-        # 兜底：当成 implicit 处理
         return (
             f"Let's keep exploring ways to make your sentence structurally richer, "
-            f"while keeping your original meaning. {mediation_goal}"
+            f"while keeping your original meaning."
         )
 
 # ========== 10. 生成 tutor 提示 ==========
@@ -452,17 +445,20 @@ def main():
 
        # 标题
     st.markdown(
-        """
-        <h1 style='text-align:center; font-size: 40px;'>
-            🧠 小句-SCAT (Syntax Complexity AI Tutor)
-        </h1>
+    f"""
+    <div style='text-align:center;'>
+        <img src='SCAT-3D.png' width='120'>
+    </div>
+    <h1 style='text-align:center; font-size:40px; margin-top: 10px;'>
+        Syntax Complexity AI Tutor (SCAT)
+    </h1>
+    <h3 style='text-align:center; color:#AAAAAA;'>
+        Dynamic Assessment × Controlled Complexification
+    </h3>
+    """,
+    unsafe_allow_html=True
+)
 
-        <h3 style='text-align:center; color:#AAAAAA;'>
-            Dynamic Assessment × Controlled Complexification
-        </h3>
-        """,
-        unsafe_allow_html=True
-    )
 
     # 简要说明（用户视角）
     st.markdown(
