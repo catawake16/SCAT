@@ -444,17 +444,18 @@ def main():
     # ========================
     # 标题区：必须要先渲染
     # ========================
-   st.markdown(
-    """
-    <div style='text-align:center;'>
-        <img src="static/SCAT-3D.png" width="80">
-        <h1>Syntax Complexity AI Tutor (SCAT)</h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    st.markdown(
+        """
+        <div style='text-align:center;'>
+            <img src="static/SCAT-3D.png" width="80">
+            <h1>Syntax Complexity AI Tutor (SCAT)</h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown("### ✏️ What can SCAT help you with?")
+
 
     # ========================
     # 这里才是显示对话历史!!!
