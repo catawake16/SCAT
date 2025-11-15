@@ -521,7 +521,7 @@ def main():
 
     # ===== 显示对话历史 =====
 # ===== 显示对话历史 =====
-if st.session_state.chat_history:
+if st.session_state.get("chat_history"):
     st.markdown("### 💬 Conversation with SCAT")
     for speaker, text in st.session_state.chat_history:
 
