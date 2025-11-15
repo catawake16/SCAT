@@ -50,7 +50,7 @@ Stylistic Constraints
 """
 # ========== 2. DA Tutor 总体 System Prompt ==========
 TUTOR_SYSTEM_PROMPT = """
-You are 小句-SCAT (Syntax Complexity AI Tutor), a warm and insightful L2 academic writing tutor.
+You are SCAT (Syntax Complexity AI Tutor), a warm and insightful L2 academic writing tutor.
 Your job is SYNTACTIC MEDIATION, not just error correction.
 
 You always:
@@ -76,9 +76,10 @@ You work with three mediation levels:
 
 (3) EXPLICIT
 - Goal: name the syntactic operation and briefly explain it with an example.
-- You can use terms like "subordinate clause", "non-finite clause", "nominalization", etc.
-- You may show an example based on the optimized target sentence.
-- Style: short mini-lesson plus encouragement.
+- You must:
+    1. **Provide a simple, concise definition** of the syntactic operation. Avoid technical jargon; use plain language.
+    2. **Micro-analysis** of the learner’s sentence: explain how the student’s original sentence could be improved syntactically. Use the optimized sentence to show this comparison.
+    3. **Provide an example sentence** based on the optimized sentence to show how the structure works in context. This should be a new example, not a replacement for the learner's sentence.
 
 You will receive:
 - original_sentence: the learner's first sentence
@@ -96,16 +97,15 @@ Your task:
    - focuses on the given operation
    - aligns with the mediation_goal text
    - keeps meaning intact and does not add new content
-3. When level is EXPLICIT, you MAY:
-   - name the structure
-   - briefly explain its function
-   - optionally show a short example (you can build on the optimized_sentence).
+3. When level is EXPLICIT, you must:
+   - provide a simple definition for the syntactic operation
+   - do a brief micro-analysis of the learner’s sentence and its transformation
+   - give a model example (use the optimized sentence as a template)
+   - explain what changed and why it makes the sentence more syntactically complex
 
 Do NOT mention the words "level", "implicit", "semi-implicit", or "explicit" in your reply.
 Do NOT talk about Poehner or typology. Just tutor the learner naturally.
 """
-
-
 # ========== 3. Uptake Analyzer System Prompt ==========
 UPTAKE_SYSTEM_PROMPT = """
 You are an expert in Dynamic Assessment (DA) for L2 writing.
@@ -334,23 +334,48 @@ def analyze_uptake(original, optimized, operation, current_level,
 # ========== 10. 生成 tutor 提示 ==========
 def generate_tutor_turn(original, optimized, operation, level,
                         last_tutor_turn, learner_turn):
+    # 从 MEDIATION_MAP 获取对应的目标说明
     mediation_goal = MEDIATION_MAP.get(operation, MEDIATION_MAP["general"]).get(level, "")
-    payload = {
-        "original_sentence": original,
-        "optimized_sentence": optimized,
-        "operation": operation,
-        "level": level,
-        "last_tutor_turn": last_tutor_turn or "",
-        "learner_turn": learner_turn or "",
-        "mediation_goal": mediation_goal
-    }
-    messages = [
-        {"role": "system", "content": TUTOR_SYSTEM_PROMPT},
-        {"role": "user", "content": json.dumps(payload, ensure_ascii=False)}
-    ]
-    tutor_turn = call_deepseek(messages, temperature=0.4)
-    return tutor_turn
+    
+    # 这里将 explicit 逻辑结合到生成提示中
+    if level == "explicit":
+        # 生成简单的定义
+        if operation == "subordination":
+            definition = "Subordination involves linking ideas with a dependent clause, like using conjunctions (because, although, etc.)."
+        elif operation == "embedding":
+            definition = "Embedding is when one clause is placed inside a noun phrase, like 'the idea that...'."
+        elif operation == "non-finite clause":
+            definition = "Non-finite clauses allow actions to be combined using infinitive verbs or -ing verbs."
+        elif operation == "nominalization":
+            definition = "Nominalization turns verbs or adjectives into nouns to create more compact and formal expressions."
+        elif operation == "noun-phrase expansion":
+            definition = "Noun-phrase expansion adds modifiers or relative clauses to elaborate on a noun."
+        elif operation == "prepositional expansion":
+            definition = "Prepositional expansion involves adding phrases like 'in the process', 'for example', etc., to give more detail."
+        else:
+            definition = "This structure organizes ideas to increase clarity and academic precision."
 
+        # 微分析（学生句子与优化句子的比较分析）
+        analysis = f"Your original sentence, '{original}', can be improved by making it more complex using {operation}. For example, the optimized sentence '{optimized}' shows how the structure works in this context."
+
+        # 示例句（基于优化句子）
+        example = f"For example, you could say: '{optimized}'"
+
+        # 返回合成的 tutor 提示
+        tutor_turn = f"""
+        **Definition:** {definition}
+
+        **Analysis:** {analysis}
+
+        **Example:** {example}
+
+        Try making a similar change in your sentence!
+        """
+    else:
+        # 如果是 implicit 或 semi-implicit，使用之前的简单结构
+        tutor_turn = generate_other_level_turn(original, optimized, operation, level, last_tutor_turn, learner_turn)
+
+    return tutor_turn
 
 # ========== 11. Streamlit UI（SCAT 界面） ==========
 def init_session_state():
@@ -384,10 +409,13 @@ def reset_cycle():
 
 
 def main():
-    st.set_page_config(page_title="SCAT - Syntax Complexity AI Tutor",
-                       layout="centered")
-    init_session_state()
 
+    st.set_page_config(
+    page_title="SCAT - Syntax Complexity AI Tutor",
+    page_icon="SCAT-3D.png",  # 图标路径
+    layout="centered"  # 保留你原来的布局设置
+)
+init_session_state()
     # 标题
     st.markdown(
         """
