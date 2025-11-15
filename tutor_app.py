@@ -411,13 +411,15 @@ def reset_cycle():
 def main():
 
     st.set_page_config(
-    page_title="SCAT - Syntax Complexity AI Tutor",
-    page_icon="SCAT-3D.png",  # 图标路径
-    layout="centered"  # 保留你原来的布局设置
-)
-init_session_state()
+        page_title="SCAT - Syntax Complexity AI Tutor",
+        page_icon="SCAT-3D.png",  # 图标路径
+        layout="centered"  # 保留你原来的布局设置
+    )
+
+    init_session_state()
+
     # 标题
-st.markdown(
+    st.markdown(
         """
         <h1 style='text-align:center; font-size: 40px;'>
             🧠小句-SCAT（Syntax Complexity AI Tutor)
@@ -447,6 +449,7 @@ st.markdown(
     )
 
     st.markdown("---")
+
 
     # ===== Step 1: 提交初始句子，开启一个 DA cycle =====
     st.subheader("Step 1 · Start a new sentence cycle")
