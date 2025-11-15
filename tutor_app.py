@@ -418,12 +418,13 @@ def main():
 
     init_session_state()
 
-    # 标题
+       # 标题
     st.markdown(
         """
         <h1 style='text-align:center; font-size: 40px;'>
-            🧠小句-SCAT（Syntax Complexity AI Tutor)
+            🧠 小句-SCAT (Syntax Complexity AI Tutor)
         </h1>
+
         <h3 style='text-align:center; color:#AAAAAA;'>
             Dynamic Assessment × Controlled Complexification
         </h3>
