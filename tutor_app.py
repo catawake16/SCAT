@@ -417,7 +417,7 @@ def main():
 )
 init_session_state()
     # 标题
-    st.markdown(
+st.markdown(
         """
         <h1 style='text-align:center; font-size: 40px;'>
             🧠小句-SCAT（Syntax Complexity AI Tutor)
